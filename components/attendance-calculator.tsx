@@ -36,12 +36,37 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
   const minRequiredFor75 = Math.ceil(totalClasses * 0.75)
   
   // Calculate how many classes can be missed while still maintaining 75%
-  // This is the difference between current presents and minimum required for 75%
-  const classesCanMiss = Math.max(0, presents - minRequiredFor75)
+  // Using the correct formula: (100 * present - percentage * total) / percentage
+  const calculateClassesCanMiss = (targetPercentage: number) => {
+    if (percentage < targetPercentage) return 0
+    
+    const numerator = 100 * presents - targetPercentage * totalClasses
+    const denominator = targetPercentage
+    
+    if (denominator === 0) return 0 // Avoid division by zero
+    
+    const classesCanMiss = Math.floor(numerator / denominator)
+    return Math.max(0, classesCanMiss)
+  }
   
-  // Calculate how many more classes needed to reach 85% and 75%
-  const classesToAttend85 = Math.max(0, Math.ceil(totalClasses * 0.85) - presents)
-  const classesToAttend75 = Math.max(0, minRequiredFor75 - presents)
+  const classesCanMiss = calculateClassesCanMiss(75)
+  
+  // CORRECTED: Calculate classes needed to reach 75% and 85%
+  // Using the correct formula: (percentage * total - 100 * present) / (100 - percentage)
+  const calculateClassesNeeded = (targetPercentage: number) => {
+    if (percentage >= targetPercentage) return 0
+    
+    const numerator = targetPercentage * totalClasses - 100 * presents
+    const denominator = 100 - targetPercentage
+    
+    if (denominator === 0) return 0 // Avoid division by zero
+    
+    const classesNeeded = Math.ceil(numerator / denominator)
+    return Math.max(0, classesNeeded)
+  }
+  
+  const classesToAttend75 = calculateClassesNeeded(75)
+  const classesToAttend85 = calculateClassesNeeded(85)
   
   // Calculate percentage if maximum classes are missed
   const percentageIfMaxMissed = ((presents - classesCanMiss) / totalClasses) * 100
@@ -82,17 +107,7 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <div className="bg-red-500/10 p-2 rounded-full">
-                  <div className="h-2 w-2 rounded-full bg-red-500"></div>
-                </div>
-                <div>
-                  <h3 className="font-medium">Classes Analysis</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Total Classes: {totalClasses} | Classes Attended: {presents}
-                  </p>
-                </div>
-              </div>
+              
               <div className="flex items-start gap-3">
                 <div className="bg-red-500/10 p-2 rounded-full">
                   <div className="h-2 w-2 rounded-full bg-red-500"></div>
@@ -100,7 +115,17 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
                 <div>
                   <h3 className="font-medium">Classes you can miss</h3>
                   <p className="text-sm text-muted-foreground">
-                    You can miss {classesCanMiss} more classes and still maintain 75% attendance.
+                    {classesCanMiss > 0 ? (
+                      <>
+                        You can miss <strong>{classesCanMiss}</strong> more classes and still maintain 75% attendance.
+                        <br />
+                        Current: <strong>{presents}/{totalClasses}</strong> → <strong>{percentage.toFixed(2)}%</strong>
+                        <br />
+                        After missing: <strong>{presents}/{totalClasses + classesCanMiss}</strong> → <strong>{((presents / (totalClasses + classesCanMiss)) * 100).toFixed(2)}%</strong>
+                      </>
+                    ) : (
+                      'You cannot miss any more classes while maintaining 75% attendance.'
+                    )}
                   </p>
                 </div>
               </div>
@@ -111,7 +136,17 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
                 <div>
                   <h3 className="font-medium">Classes needed for 75%</h3>
                   <p className="text-sm text-muted-foreground">
-                    {classesToAttend75 > 0 ? `You need to attend ${classesToAttend75} more classes to reach 75% attendance.` : 'You have already reached 75% attendance.'}
+                    {classesToAttend75 > 0 ? (
+                      <>
+                        You need to attend <strong>{classesToAttend75}</strong> more classes to reach 75% attendance.
+                        <br />
+                        Current: <strong>{presents}/{totalClasses}</strong> → <strong>{percentage.toFixed(2)}%</strong>
+                        <br />
+                        After attending: <strong>{presents + classesToAttend75}/{totalClasses + classesToAttend75}</strong> → <strong>{(((presents + classesToAttend75) / (totalClasses + classesToAttend75)) * 100).toFixed(2)}%</strong>
+                      </>
+                    ) : (
+                      'You have already reached 75% attendance.'
+                    )}
                   </p>
                 </div>
               </div>
@@ -122,7 +157,17 @@ export function SimpleCalculator({ totalClasses, presents }: SimpleCalculatorPro
                 <div>
                   <h3 className="font-medium">Classes needed for 85%</h3>
                   <p className="text-sm text-muted-foreground">
-                    {classesToAttend85 > 0 ? `You need to attend ${classesToAttend85} more classes to reach 85% attendance.` : 'You have already reached 85% attendance.'}
+                    {classesToAttend85 > 0 ? (
+                      <>
+                        You need to attend <strong>{classesToAttend85}</strong> more classes to reach 85% attendance.
+                        <br />
+                        Current: <strong>{presents}/{totalClasses}</strong> → <strong>{percentage.toFixed(2)}%</strong>
+                        <br />
+                        After attending: <strong>{presents + classesToAttend85}/{totalClasses + classesToAttend85}</strong> → <strong>{(((presents + classesToAttend85) / (totalClasses + classesToAttend85)) * 100).toFixed(2)}%</strong>
+                      </>
+                    ) : (
+                      'You have already reached 85% attendance.'
+                    )}
                   </p>
                 </div>
               </div>
