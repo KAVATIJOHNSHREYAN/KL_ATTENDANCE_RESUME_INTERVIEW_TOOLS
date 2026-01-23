@@ -4,11 +4,10 @@ import { motion } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Calculator, BookOpen, GraduationCap, AlertCircle } from "lucide-react"
+import { Calculator, BookOpen, GraduationCap, AlertCircle, Camera } from "lucide-react"
 import Script from 'next/script'
 
 // Force static generation for export
-// export const dynamic = "force-static"
 
 export default function WelcomePage() {
   const jsonLd = {
@@ -72,7 +71,7 @@ export default function WelcomePage() {
         </motion.p>
       </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 md:gap-8 w-full max-w-5xl px-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 w-full max-w-6xl px-2">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -168,6 +167,58 @@ export default function WelcomePage() {
             </Card>
           </div>
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+          className="flex flex-col h-full"
+        >
+          <div className="gradient-glow h-full">
+            <Card className="flex flex-col h-full hover:shadow-lg transition-shadow border-red-500/20 bg-card/80 backdrop-blur-sm">
+              <CardHeader>
+                <div className="flex items-center gap-2 mb-2 group hover:cursor-pointer">
+                  <Camera className="h-6 w-6 text-red-500 group-hover:scale-110 transition-transform" />
+                  <CardTitle className="relative font-poppins font-semibold">
+                    Screenshot Calculator
+                    <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-red-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+                  </CardTitle>
+                </div>
+                <CardDescription className="font-outfit">
+                  Upload attendance screenshots for automated calculation
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2 font-outfit">
+                    <span className="text-red-500">•</span>
+                    <span>Upload attendance report screenshots</span>
+                  </li>
+                  <li className="flex items-start gap-2 font-outfit">
+                    <span className="text-red-500">•</span>
+                    <span>Automatic OCR text extraction</span>
+                  </li>
+                  <li className="flex items-start gap-2 font-outfit">
+                    <span className="text-red-500">•</span>
+                    <span>Subject-wise LTPS calculation</span>
+                  </li>
+                  <li className="flex items-start gap-2 font-outfit">
+                    <span className="text-red-500">•</span>
+                    <span>Save and manage multiple reports</span>
+                  </li>
+                </ul>
+              </CardContent>
+              <CardFooter className="mt-auto pt-2">
+                <div className="w-full">
+                  <Link href="/screenshot">
+                    <Button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">Use Screenshot Calculator</Button>
+                  </Link>
+                </div>
+              </CardFooter>
+            </Card>
+          </div>
+        </motion.div>
       </div>
 
       <motion.div
@@ -235,4 +286,4 @@ export default function WelcomePage() {
       </motion.div>
     </div>
   )
-} 
+}
