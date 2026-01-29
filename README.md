@@ -8,6 +8,7 @@ A modern, responsive web application for KLU students to calculate their attenda
 
 - **Simple Attendance Calculator**: Calculate attendance percentage based on total classes and classes attended
 - **LTPS Calculator**: Advanced calculator for Lecture, Tutorial, Practical, and Skilling components
+- **Screenshot Calculator**: Upload a screenshot of your attendance table for automatic extraction and calculation
 - **Attendance Analysis**: Check eligibility status based on university attendance requirements (75% and 85%)
 - **Save Calculations**: Save your calculations as drafts with subject names
 - **Draft Management**: View, load, and delete saved drafts
@@ -23,6 +24,7 @@ A modern, responsive web application for KLU students to calculate their attenda
 - **Framer Motion**: Animation library
 - **Radix UI**: Accessible component primitives
 - **js-cookie**: Cookie management for saved drafts
+- **OCR.space API**: Optical Character Recognition for text extraction
 
 ## Getting Started
 
@@ -75,6 +77,14 @@ A modern, responsive web application for KLU students to calculate their attenda
 2. Enter attendance percentages for each component (Lecture, Tutorial, Practical, Skilling)
 3. Enter subject name (optional, for saving)
 4. Click "Calculate" to see your weighted attendance percentage and eligibility status
+
+### Screenshot Calculator
+
+1. Navigate to the Screenshot Calculator page
+2. Upload a screenshot of your attendance table
+3. The app will automatically extract course details and attendance numbers
+4. View detailed analysis including skippable classes and required attendance
+5. Save the results for future reference
 
 ### Managing Saved Drafts
 
