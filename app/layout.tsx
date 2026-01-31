@@ -39,9 +39,6 @@ export const metadata: Metadata = {
     telephone: false,
   },
   metadataBase: new URL('https://klattendance.vercel.app'),
-  alternates: {
-    canonical: '/',
-  },
   openGraph: {
     title: 'KL University Attendance Calculator',
     description: 'Calculate your attendance percentage and check eligibility for KL University exams based on university policy.',
