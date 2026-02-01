@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { X } from "lucide-react"
 import { LTPSCalculator } from "@/components/attendance-calculator"
 import Cookies from 'js-cookie'
+import Script from 'next/script'
 
 interface ComponentState {
   percentage: number | null
@@ -166,8 +167,27 @@ export default function LTPSCalculatorPage() {
            components.skilling.percentage !== null
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'LTPS Attendance Calculator',
+    description: 'Calculate weighted attendance for Lecture, Tutorial, Practical, and Skilling components.',
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Web',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD'
+    }
+  }
+
   return (
     <div className="w-full space-y-6 mx-auto max-w-xl px-4">
+      <Script
+        id="ltps-calc-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <motion.div 
         className="flex flex-wrap items-center justify-center gap-2 mb-10"
         initial={{ opacity: 0, y: -10 }}

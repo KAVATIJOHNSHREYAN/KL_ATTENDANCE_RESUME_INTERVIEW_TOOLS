@@ -1,10 +1,9 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Calculator, BookOpen, GraduationCap, AlertCircle, Camera } from "lucide-react"
+import { Calculator, BookOpen, GraduationCap, Camera, LogIn } from "lucide-react"
 import Script from 'next/script'
 
 // Force static generation for export
@@ -36,48 +35,73 @@ export default function WelcomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+      <div 
         className="text-center mb-8 sm:mb-12 w-full px-2"
       >
         <div className="relative inline-block mb-6">
-          <motion.h1 
+          <h1 
             className="text-3xl sm:text-4xl md:text-5xl font-bold font-poppins bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground/90 to-foreground drop-shadow-sm letter-spacing-tight"
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            transition={{
-              duration: 0.8,
-              ease: "easeOut",
-            }}
           >
             Attendance Calculator
-          </motion.h1>
-          <motion.div
+          </h1>
+          <div
             className="absolute -bottom-3 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-400 to-red-600 rounded-full"
-            initial={{ width: "0%" }}
-            animate={{ width: "100%" }}
-            transition={{ duration: 1, delay: 0.5 }}
           />
         </div>
-        <motion.p 
+        <p 
           className="text-lg sm:text-xl text-muted-foreground font-outfit font-light max-w-2xl mx-auto px-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
         >
           Calculate your attendance percentage and check eligibility for exams based on the University attendance policy.
-        </motion.p>
-      </motion.div>
+        </p>
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 w-full max-w-6xl px-2">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-          className="flex flex-col h-full"
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8 w-full max-w-[90rem] px-2">
+        <div
+          className="flex flex-col h-full transition-transform hover:scale-[1.02]"
+        >
+          <div className="gradient-glow h-full">
+            <Card className="flex flex-col h-full hover:shadow-lg transition-shadow border-red-500/20 bg-card/80 backdrop-blur-sm">
+              <CardHeader>
+                <div className="flex items-center gap-2 mb-2 group hover:cursor-pointer">
+                  <LogIn className="h-6 w-6 text-red-500 group-hover:scale-110 transition-transform" />
+                  <CardTitle className="relative font-poppins font-semibold">
+                    ERP Login
+                    <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-red-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+                  </CardTitle>
+                </div>
+                <CardDescription className="font-outfit">
+                  Connect to KL ERP to fetch data automatically
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-grow">
+                <ul className="space-y-2">
+                  <li className="flex items-start gap-2 font-outfit">
+                    <span className="text-red-500">•</span>
+                    <span>Securely login to university ERP</span>
+                  </li>
+                  <li className="flex items-start gap-2 font-outfit">
+                    <span className="text-red-500">•</span>
+                    <span>Auto-fetch attendance and timetable</span>
+                  </li>
+                  <li className="flex items-start gap-2 font-outfit">
+                    <span className="text-red-500">•</span>
+                    <span>Check eligibility without manual entry</span>
+                  </li>
+                </ul>
+              </CardContent>
+              <CardFooter className="mt-auto pt-2">
+                <div className="w-full">
+                  <Link href="/login">
+                    <Button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">Login to ERP</Button>
+                  </Link>
+                </div>
+              </CardFooter>
+            </Card>
+          </div>
+        </div>
+
+        <div
+          className="flex flex-col h-full transition-transform hover:scale-[1.02]"
         >
           <div className="gradient-glow h-full">
             <Card className="flex flex-col h-full hover:shadow-lg transition-shadow border-red-500/20 bg-card/80 backdrop-blur-sm">
@@ -118,14 +142,10 @@ export default function WelcomePage() {
               </CardFooter>
             </Card>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-          className="flex flex-col h-full"
+        <div
+          className="flex flex-col h-full transition-transform hover:scale-[1.02]"
         >
           <div className="gradient-glow h-full">
             <Card className="flex flex-col h-full hover:shadow-lg transition-shadow border-red-500/20 bg-card/80 backdrop-blur-sm">
@@ -166,14 +186,10 @@ export default function WelcomePage() {
               </CardFooter>
             </Card>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
-          className="flex flex-col h-full"
+        <div
+          className="flex flex-col h-full transition-transform hover:scale-[1.02]"
         >
           <div className="gradient-glow h-full">
             <Card className="flex flex-col h-full hover:shadow-lg transition-shadow border-red-500/20 bg-card/80 backdrop-blur-sm">
@@ -218,13 +234,10 @@ export default function WelcomePage() {
               </CardFooter>
             </Card>
           </div>
-        </motion.div>
+        </div>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.6 }}
+      <div
         className="mt-8 sm:mt-12 w-full max-w-3xl px-2"
       >
         <div className="policy-card">
@@ -283,7 +296,7 @@ export default function WelcomePage() {
             </CardContent>
           </Card>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

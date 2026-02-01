@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Upload, Image as ImageIcon, Loader2, Save, Trash2, AlertCircle, CheckCircle2, XCircle, Terminal, Eye, EyeOff, X } from "lucide-react"
 import Image from 'next/image'
 import Cookies from 'js-cookie'
+import Script from 'next/script'
 
 interface AttendanceRecord {
   coursecode: string
@@ -606,8 +607,27 @@ export default function ScreenshotCalculatorPage() {
     Cookies.set('screenshotCalculatorDrafts', JSON.stringify(updatedResults), { expires: 365 })
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Screenshot Attendance Calculator',
+    description: 'Upload your attendance screenshot to automatically calculate percentage and check eligibility using OCR.',
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Web',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD'
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <Script
+        id="screenshot-calc-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

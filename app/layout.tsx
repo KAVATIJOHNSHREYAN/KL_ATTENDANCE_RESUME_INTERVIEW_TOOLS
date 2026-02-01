@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   generator: 'Next.js',
   applicationName: 'KL University Attendance Calculator',
   referrer: 'origin-when-cross-origin',
-  keywords: ['KL University', 'attendance calculator', 'exam eligibility', 'university attendance', 'LTPS calculator'],
+  keywords: ['KL University', 'attendance calculator', 'exam eligibility', 'university attendance', 'LTPS calculator', 'KL ERP', 'KL University ERP', 'Student Portal', 'Condonation', 'Detention', 'Attendance Percentage'],
   authors: [{ name: 'KL University' }],
   creator: 'KL University',
   publisher: 'KL University',

@@ -135,14 +135,9 @@ interface StoredAttendanceData {
 
 // Simple and robust parsing function
 export function smartParseAttendanceData(text: string): AttendanceRecord[] {
-  console.log('Starting attendance data extraction...')
-  console.log('Raw OCR text (first 500 chars):', text.substring(0, 500))
-  
   const records: AttendanceRecord[] = []
   const rawLines = text.split('\n')
   
-  console.log(`Total lines to process: ${rawLines.length}`)
-
   // Pre-process: Merge continuation lines
   // Some OCR results split a single row into multiple lines.
   // We look for lines that appear to be just numbers/stats and append them to the previous line.
@@ -573,17 +568,13 @@ function extractFields(parts: string[], rawLine: string): {
 // Image size optimization to prevent timeouts
 async function optimizeImageSize(buffer: Buffer): Promise<Buffer> {
   try {
-    console.log('Optimizing image size...')
-    
     // Check if image is too large (> 2MB)
     const maxSize = 2 * 1024 * 1024 // 2MB
     
     if (buffer.length <= maxSize) {
-      console.log('Image size is acceptable, no optimization needed')
       return buffer
     }
     
-    console.log(`Image is ${buffer.length} bytes, which is too large. Using original for now.`)
     // In production, you could use Sharp or Canvas to resize the image
     // For now, we'll use the original and rely on timeout handling
     
@@ -597,8 +588,6 @@ async function optimizeImageSize(buffer: Buffer): Promise<Buffer> {
 // Image preprocessing for better OCR accuracy
 async function preprocessImageForOCR(buffer: Buffer): Promise<Buffer> {
   try {
-    console.log('Preprocessing image for better OCR accuracy...')
-    
     // For now, return the original buffer
     // In a production environment, you could use libraries like Sharp or Canvas
     // to enhance contrast, adjust brightness, remove noise, etc.
@@ -610,7 +599,6 @@ async function preprocessImageForOCR(buffer: Buffer): Promise<Buffer> {
     // 4. Remove noise
     // 5. Sharpen text
     
-    console.log('Image preprocessing completed (using original for now)')
     return buffer
   } catch (error) {
     console.error('Image preprocessing failed, using original:', error)
@@ -621,11 +609,8 @@ async function preprocessImageForOCR(buffer: Buffer): Promise<Buffer> {
 // Enhanced OCR.space API integration with better settings for character recognition
 async function performOCRWithOCRSpace(buffer: Buffer): Promise<string> {
   try {
-    console.log('OCR.space: Starting enhanced table extraction...')
-    
     // Check image size and optimize if needed
     const optimizedBuffer = await optimizeImageSize(buffer)
-    console.log(`Image size: ${buffer.length} bytes -> ${optimizedBuffer.length} bytes`)
     
     // Preprocess the image for better OCR accuracy
     const preprocessedBuffer = await preprocessImageForOCR(optimizedBuffer)
@@ -662,7 +647,6 @@ async function performOCRWithOCRSpace(buffer: Buffer): Promise<string> {
       clearTimeout(timeoutId)
       
       const result = await response.json()
-      console.log('OCR.space response:', JSON.stringify(result, null, 2))
     
     if (result.IsErroredOnProcessing) {
       console.error('OCR.space error:', result.ErrorMessage)
@@ -670,25 +654,20 @@ async function performOCRWithOCRSpace(buffer: Buffer): Promise<string> {
     }
     
     let extractedText = result.ParsedResults?.[0]?.ParsedText || ''
-    console.log('OCR.space extracted text length:', extractedText.length)
-    console.log('OCR.space raw text (first 500 chars):', extractedText.substring(0, 500))
-    console.log('Number of lines in raw text:', extractedText.split('\n').length)
     
     // Apply post-processing to fix common OCR errors
     extractedText = postProcessOCRText(extractedText)
-    console.log('Processed text lines:', extractedText.split('\n').length)
     
     // If OCR.space gives poor results, try with different engine
     if (extractedText.length < 100) {
-      console.log('OCR.space results seem poor, trying with Engine 1...')
       return await performOCRWithEngine1Fallback(buffer)
     }
     
     return extractedText
     } catch (fetchError) {
       clearTimeout(timeoutId)
-      if (fetchError.name === 'AbortError') {
-        console.log('OCR.space request timed out, trying Engine 2...')
+      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+        // OCR.space request timed out, trying Engine 2...
       } else {
         console.error('OCR.space fetch failed:', fetchError)
       }
@@ -704,8 +683,6 @@ async function performOCRWithOCRSpace(buffer: Buffer): Promise<string> {
 // Try OCR with Engine 1 as backup
 async function performOCRWithEngine1Fallback(buffer: Buffer): Promise<string> {
   try {
-    console.log('OCR.space: Trying with Engine 1...')
-    
     // Use the same optimization and preprocessing
     const optimizedBuffer = await optimizeImageSize(buffer)
     const preprocessedBuffer = await preprocessImageForOCR(optimizedBuffer)
@@ -740,7 +717,6 @@ async function performOCRWithEngine1Fallback(buffer: Buffer): Promise<string> {
       const result = await response.json()
       
       if (result.IsErroredOnProcessing) {
-        console.log('Engine 1 also failed, using fallback...')
         return fallbackOCR(buffer)
       }
       
@@ -748,15 +724,14 @@ async function performOCRWithEngine1Fallback(buffer: Buffer): Promise<string> {
       extractedText = postProcessOCRText(extractedText)
       
       if (extractedText.length < 50) {
-        console.log('Both engines failed, using fallback...')
         return fallbackOCR(buffer)
       }
       
       return extractedText
     } catch (fetchError) {
       clearTimeout(timeoutId)
-      if (fetchError.name === 'AbortError') {
-        console.log('OCR.space Engine 1 request timed out, using fallback...')
+      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+        // OCR.space Engine 1 request timed out, using fallback...
       } else {
         console.error('OCR.space Engine 1 fetch failed:', fetchError)
       }
@@ -771,8 +746,6 @@ async function performOCRWithEngine1Fallback(buffer: Buffer): Promise<string> {
 // Try OCR with Engine 2 as an alternative helper
 async function performOCRWithEngine2(buffer: Buffer): Promise<string> {
   try {
-    console.log('OCR.space: Trying with Engine 2 helper...')
-
     // Reuse optimization and preprocessing steps
     const optimizedBuffer = await optimizeImageSize(buffer)
     const preprocessedBuffer = await preprocessImageForOCR(optimizedBuffer)
@@ -805,7 +778,6 @@ async function performOCRWithEngine2(buffer: Buffer): Promise<string> {
 
       const result = await response.json()
       if (result.IsErroredOnProcessing) {
-        console.log('Engine 2 helper failed, using fallback...')
         return fallbackOCR(buffer)
       }
 
@@ -813,15 +785,14 @@ async function performOCRWithEngine2(buffer: Buffer): Promise<string> {
       extractedText = postProcessOCRText(extractedText)
 
       if (extractedText.length < 50) {
-        console.log('Engine 2 helper produced short text, using fallback...')
         return fallbackOCR(buffer)
       }
 
       return extractedText
-    } catch (fetchError: any) {
+    } catch (fetchError) {
       clearTimeout(timeoutId)
-      if (fetchError?.name === 'AbortError') {
-        console.log('OCR.space Engine 2 helper timed out, using fallback...')
+      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+        // OCR.space Engine 2 helper timed out, using fallback...
       } else {
         console.error('OCR.space Engine 2 helper fetch failed:', fetchError)
       }
@@ -835,8 +806,6 @@ async function performOCRWithEngine2(buffer: Buffer): Promise<string> {
 
 // Post-process OCR text to fix common recognition errors
 function postProcessOCRText(text: string): string {
-  console.log('Applying OCR post-processing...')
-  console.log('Input text lines:', text.split('\n').length)
   
   let processed = text
   
@@ -860,15 +829,9 @@ function postProcessOCRText(text: string): string {
   
   // Process line by line to preserve structure
   const lines = processed.split('\n')
-  console.log('Processing', lines.length, 'lines individually')
   
   const processedLines = lines.map((line, index) => {
     if (line.trim() === '') return line
-    
-    // Log each line for debugging
-    if (index < 5) {
-      console.log(`Line ${index + 1}: "${line}"`)
-    }
     
     // Split by tabs or multiple spaces, but be more conservative
     let parts = line.split(/\t+|\s{3,}/)
@@ -917,9 +880,6 @@ function postProcessOCRText(text: string): string {
   // Remove empty lines at the beginning and end, but preserve internal structure
   processed = processed.replace(/^\n+/, '').replace(/\n+$/, '')
   
-  console.log('Post-processing completed')
-  console.log('Output text lines:', processed.split('\n').length)
-  
   return processed
 }
 
@@ -927,7 +887,6 @@ function postProcessOCRText(text: string): string {
 async function fallbackOCR(buffer: Buffer): Promise<string> {
   // Return empty string or throw error to indicate OCR failure
   // We do not want to return hardcoded mock data for generic usage
-  console.warn('Fallback OCR triggered but no hardcoded data is allowed.')
   throw new Error('OCR extraction failed for both engines.')
 }
 

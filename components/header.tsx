@@ -30,6 +30,7 @@ export default function Header() {
     { name: 'Simple Calculator', href: '/simple' },
     { name: 'LTPS Calculator', href: '/ltps' },
     { name: 'Screenshot Calculator', href: '/screenshot' },
+    { name: 'ERP Login', href: '/login' },
   ]
 
   return (

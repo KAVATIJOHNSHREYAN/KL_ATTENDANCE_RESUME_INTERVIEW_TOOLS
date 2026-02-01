@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { X } from "lucide-react"
 import { SimpleCalculator } from '@/components/attendance-calculator'
 import Cookies from 'js-cookie'
+import Script from 'next/script'
 
 interface SavedResult {
   id: string;
@@ -117,8 +118,27 @@ export default function SimpleCalculatorPage() {
     return totalClasses !== null && presents !== null && totalClasses > 0 && presents > 0
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Simple Attendance Calculator',
+    description: 'Calculate your simple attendance percentage based on total classes and attended classes.',
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Web',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD'
+    }
+  }
+
   return (
     <div className="w-full space-y-6 mx-auto max-w-xl px-4">
+      <Script
+        id="simple-calc-jsonld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <motion.div 
         className="flex flex-wrap items-center justify-center gap-2 mb-10"
         initial={{ opacity: 0, y: -10 }}
