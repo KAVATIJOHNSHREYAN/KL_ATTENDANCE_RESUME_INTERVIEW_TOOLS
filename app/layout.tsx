@@ -76,15 +76,15 @@ export const metadata: Metadata = {
     google: 'YKmd0c6z13AOdpU7THbo1wqIqG4BBzjilNPhP-5_bps',
   },
   icons: {
-    icon: '/KL_University_logo.svg',
-    shortcut: '/KL_University_logo.svg',
-    apple: '/KL_University_logo.svg',
+    icon: '/KL_University_Favicon.svg',
+    shortcut: '/KL_University_Favicon.svg',
+    apple: '/KL_University_Favicon.svg',
     other: [
       {
         rel: 'icon',
         type: 'image/svg+xml',
         sizes: 'any',
-        url: '/KL_University_logo.svg',
+        url: '/KL_University_Favicon.svg',
       },
       {
         rel: 'manifest',
