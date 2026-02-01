@@ -17,14 +17,25 @@ A modern, responsive web application for KLU students to calculate their attenda
 
 ## Technologies Used
 
-- **Next.js 15**: React framework for production
-- **React 19**: UI library
-- **TypeScript**: Type-safe JavaScript
-- **Tailwind CSS**: Utility-first CSS framework
-- **Framer Motion**: Animation library
-- **Radix UI**: Accessible component primitives
-- **js-cookie**: Cookie management for saved drafts
-- **OCR.space API**: Optical Character Recognition for text extraction
+### Core & Framework
+- **Next.js 15 (App Router)**: React framework for production with server-side rendering and API routes
+- **React 18**: Component-based UI library
+- **TypeScript**: Static type definitions for enhanced code quality and developer experience
+
+### UI & Styling
+- **Tailwind CSS**: Utility-first CSS framework for rapid UI development
+- **Shadcn UI**: Reusable components built with Radix UI and Tailwind CSS
+- **Radix UI**: Unstyled, accessible component primitives
+- **Framer Motion**: Production-ready motion library for React
+- **Lucide React**: Beautiful & consistent icon set
+- **Next/Font**: Optimized font loading (Poppins & Outfit)
+
+### Backend & Functionality
+- **Cheerio**: Fast, flexible, and lean implementation of core jQuery for server-side HTML parsing (Web Scraping)
+- **Native Fetch API**: For handling HTTP requests
+- **OCR.space API**: Optical Character Recognition for extracting attendance data from screenshots
+- **js-cookie**: Simple, lightweight JavaScript API for handling cookies
+- **Next.js API Routes**: Serverless functions for handling backend logic (Authentication, Scraping, OCR)
 
 ## Getting Started
 
