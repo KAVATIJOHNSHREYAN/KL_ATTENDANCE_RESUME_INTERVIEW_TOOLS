@@ -9,24 +9,56 @@ import Script from 'next/script'
 // Force static generation for export
 
 export default function WelcomePage() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'KL University Attendance Calculator',
-    description: 'Calculate your attendance percentage and check eligibility for KL University exams based on the University attendance policy.',
-    applicationCategory: 'EducationalApplication',
-    operatingSystem: 'Web',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD'
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      name: 'KL University Attendance Calculator',
+      description: 'Calculate your attendance percentage and check eligibility for KL University exams based on the University attendance policy.',
+      applicationCategory: 'EducationalApplication',
+      operatingSystem: 'Web',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD'
+      },
+      creator: {
+        '@type': 'Organization',
+        name: 'KL University',
+        url: 'https://www.kluniversity.in/'
+      }
     },
-    creator: {
-      '@type': 'Organization',
-      name: 'KL University',
-      url: 'https://www.kluniversity.in/'
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'What is the minimum attendance required at KL University?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'The minimum attendance required for most programs is 85%. For Law programs (BBA-LLB, LLB, LLM), the minimum is 70%.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'What is Condonation in KL University?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Condonation is a fine that allows students with 75-85% attendance to write exams. For Law programs, this range is 65-70%. Attendance below these thresholds leads to detention.'
+          }
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Medical Certificate accepted for low attendance?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes, medical certificates are required for attendance consideration, but they typically apply only within the condonation range. No relaxation is given below 75% (65% for Law) under any circumstances.'
+          }
+        }
+      ]
     }
-  }
+  ]
 
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-full">
@@ -238,61 +270,84 @@ export default function WelcomePage() {
       </div>
 
       <div
-        className="mt-8 sm:mt-12 w-full max-w-3xl px-2"
+        className="mt-8 sm:mt-12 w-full max-w-5xl px-2"
       >
-        <div className="policy-card">
-          <Card className="bg-transparent shadow-none border-0">
-            <CardHeader className="px-5 pt-5">
-              <div className="flex items-center gap-2 mb-2 group hover:cursor-pointer">
-                <GraduationCap className="h-6 w-6 text-red-500 group-hover:scale-110 transition-transform" />
-                <h2 className="text-xl font-semibold font-poppins relative inline-block">
-                  Attendance Policy
-                  <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-red-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
-                </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card className="bg-card/50 backdrop-blur-sm border-red-500/10">
+            <CardHeader>
+              <div className="flex items-center gap-2 mb-2">
+                <GraduationCap className="h-6 w-6 text-red-500" />
+                <CardTitle className="font-poppins">Attendance Policy Highlights</CardTitle>
               </div>
             </CardHeader>
-            
-            <CardContent className="px-5 pb-5">
-              <div className="space-y-5">
-                <div className="flex items-start gap-3 group hover:cursor-pointer">
-                  <div className="bg-green-500/10 p-2 rounded-full flex-shrink-0 group-hover:bg-green-500/20 transition-colors">
-                    <div className="h-2 w-2 rounded-full bg-green-500"></div>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold font-poppins relative inline-block">
-                      Eligible (≥85%)
-                      <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-green-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
-                    </h3>
-                    <p className="text-sm text-muted-foreground font-outfit">Your attendance is above the minimum required 85%</p>
-                  </div>
+            <CardContent className="space-y-4">
+              <div className="flex items-start gap-3">
+                <div className="bg-green-500/10 p-2 rounded-full mt-1">
+                  <div className="h-2 w-2 rounded-full bg-green-500"></div>
                 </div>
-                
-                <div className="flex items-start gap-3 group hover:cursor-pointer">
-                  <div className="bg-yellow-500/10 p-2 rounded-full flex-shrink-0 group-hover:bg-yellow-500/20 transition-colors">
-                    <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold font-poppins relative inline-block">
-                      Conditional Eligibility (75-85%)
-                      <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-yellow-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
-                    </h3>
-                    <p className="text-sm text-muted-foreground font-outfit">You need to pay a condonation fine</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start gap-3 group hover:cursor-pointer">
-                  <div className="bg-red-500/10 p-2 rounded-full flex-shrink-0 group-hover:bg-red-500/20 transition-colors">
-                    <div className="h-2 w-2 rounded-full bg-red-500"></div>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold font-poppins relative inline-block">
-                      Not Eligible (&lt;75%)
-                      <span className="absolute left-0 right-0 bottom-0 h-0.5 bg-red-500 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
-                    </h3>
-                    <p className="text-sm text-muted-foreground font-outfit">Your attendance is below 75%. You may face detention.</p>
-                  </div>
+                <div>
+                  <h3 className="font-semibold font-poppins">Standard Requirement (≥85%)</h3>
+                  <p className="text-sm text-muted-foreground font-outfit">Minimum 85% attendance is required for most university programs to be eligible for exams without fines.</p>
                 </div>
               </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="bg-yellow-500/10 p-2 rounded-full mt-1">
+                  <div className="h-2 w-2 rounded-full bg-yellow-500"></div>
+                </div>
+                <div>
+                  <h3 className="font-semibold font-poppins">Condonation Range (75-85%)</h3>
+                  <p className="text-sm text-muted-foreground font-outfit">Students in this range may be permitted to write exams upon payment of a condonation fee. Medical certificates are often required.</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-3">
+                <div className="bg-blue-500/10 p-2 rounded-full mt-1">
+                  <div className="h-2 w-2 rounded-full bg-blue-500"></div>
+                </div>
+                <div>
+                  <h3 className="font-semibold font-poppins">Law Programs Special Policy</h3>
+                  <p className="text-sm text-muted-foreground font-outfit">For BBA-LLB, LLB, and LLM: Minimum 70%. Condonation range is 65-70%.</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-card/50 backdrop-blur-sm border-red-500/10">
+            <CardHeader>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="h-6 w-6 rounded-full border-2 border-red-500 flex items-center justify-center">
+                  <span className="text-red-500 font-bold text-xs">!</span>
+                </div>
+                <CardTitle className="font-poppins">Critical Warnings & Detention</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="bg-red-500/5 border border-red-500/20 rounded-lg p-4">
+                <h3 className="font-semibold text-red-600 dark:text-red-400 font-poppins mb-1">Detention Risk (&lt;75%)</h3>
+                <p className="text-sm text-muted-foreground font-outfit">
+                  Students with less than 75% attendance (65% for Law) are generally <strong>detained</strong> from writing examinations.
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                 <div className="flex items-center gap-2 text-sm text-muted-foreground font-outfit">
+                    <span className="h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
+                    <span>No relaxation below 75% under any circumstances.</span>
+                 </div>
+                 <div className="flex items-center gap-2 text-sm text-muted-foreground font-outfit">
+                    <span className="h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
+                    <span>Medical certificates must be submitted promptly.</span>
+                 </div>
+                 <div className="flex items-center gap-2 text-sm text-muted-foreground font-outfit">
+                    <span className="h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
+                    <span>Regular monitoring is the student's responsibility.</span>
+                 </div>
+              </div>
+              
+              <p className="text-xs text-muted-foreground mt-4 italic border-t border-border pt-2">
+                * This calculator is for reference only. Always verify with official university records.
+              </p>
             </CardContent>
           </Card>
         </div>
