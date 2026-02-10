@@ -42,9 +42,92 @@ export default function LoginPage() {
   const [selectedSem, setSelectedSem] = useState('')
   const [csrfToken, setCsrfToken] = useState('')
 
+  const processImageForOCR = (blob: Blob): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      const url = URL.createObjectURL(blob)
+      img.src = url
+      
+      img.onload = () => {
+          // Upscale image to improve OCR recognition of small/pixelated text
+          // Uniform Scaling (4.0x) preserves horizontal stroke thickness (fixes 't' -> 'l')
+          // while Gamma 0.5 handles the thinning of bold text.
+          const scaleX = 4.0
+          const scaleY = 4.0 
+          const padding = 40
+          const canvas = document.createElement('canvas')
+        canvas.width = (img.width * scaleX) + (padding * 2)
+        canvas.height = (img.height * scaleY) + (padding * 2)
+        const ctx = canvas.getContext('2d')
+        if (!ctx) {
+          URL.revokeObjectURL(url)
+          reject(new Error('Canvas context not available'))
+          return
+        }
+        
+        // Fill white background first (for padding)
+        ctx.fillStyle = '#FFFFFF'
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+        
+        // Removed Blur: It reduced visibility too much
+        
+        // Use high quality scaling
+        ctx.imageSmoothingEnabled = true
+        ctx.imageSmoothingQuality = 'high'
+        ctx.drawImage(img, padding, padding, img.width * scaleX, img.height * scaleY)
+        
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+        const data = imageData.data
+        
+        // Preprocess: Red Channel Inversion + Linear Contrast Boost
+        // Goal: Restore visibility while maintaining separation
+        
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i]
+          
+          // 1. Red Channel Inversion
+          // Pink (R=255) -> 0 (Black)
+          // Black (R=0) -> 255 (White)
+          let val = 255 - r
+          
+          // 2. Contrast Boost (Linear Level Adjustment)
+          // Previous Gamma 0.5 washed out the text (gray).
+          // We need to make the text BLACK again.
+          // Cut off bottom noise (imperfections in pink) and stretch.
+          // val = (val - black_point) * gain
+          
+          val = (val - 40) * 1.3
+          
+          // Clamp
+          if (val < 0) val = 0
+          if (val > 255) val = 255
+          
+          data[i] = val
+          data[i + 1] = val
+          data[i + 2] = val
+          // Alpha remains unchanged
+        }
+         
+         // Removed Sharpening
+         
+         ctx.putImageData(imageData, 0, 0)
+        const base64 = canvas.toDataURL('image/png')
+        URL.revokeObjectURL(url)
+        resolve(base64)
+      }
+      
+      img.onerror = (err) => {
+        URL.revokeObjectURL(url)
+        reject(err)
+      }
+    })
+  }
+
   const fetchCaptcha = async (preserveError = false) => {
     setCaptchaLoading(true)
     if (!preserveError) setError(null)
+    setCaptcha('') // Clear previous captcha
+    
     try {
       const response = await fetch('/api/captcha')
       if (!response.ok) throw new Error('Failed to load captcha')
@@ -55,6 +138,58 @@ export default function LoginPage() {
       const blob = await response.blob()
       const imageUrl = URL.createObjectURL(blob)
       setCaptchaImage(imageUrl)
+
+      // Auto-solve captcha with fallback strategy
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)
+      
+      reader.onloadend = async () => {
+        const originalBase64 = reader.result as string
+        let processedBase64: string | null = null
+
+        try {
+          processedBase64 = await processImageForOCR(blob)
+        } catch (processErr) {
+          console.warn('Image preprocessing failed', processErr)
+        }
+
+        // Helper to call API
+        const solve = async (img: string) => {
+            const res = await fetch('/api/solve-captcha', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ image: img })
+            })
+            return await res.json()
+        }
+
+        let solvedText = ''
+
+        // 1. Try Processed Image first (Optimized for OCR)
+        if (processedBase64) {
+            try {
+                const data = await solve(processedBase64)
+                if (data.success && data.text) {
+                    solvedText = data.text
+                }
+            } catch (e) { console.error('Processed OCR failed', e) }
+        }
+
+        // 2. If failed, fallback to Original Image
+        if (!solvedText) {
+            console.log('Processed image yielded no text, trying original...')
+            try {
+                const data = await solve(originalBase64)
+                if (data.success && data.text) {
+                    solvedText = data.text
+                }
+            } catch (e) { console.error('Original OCR failed', e) }
+        }
+
+        if (solvedText) {
+            setCaptcha(solvedText)
+        }
+      }
     } catch (err) {
       console.error(err)
       setError('Failed to load CAPTCHA. Please try again.')
@@ -344,6 +479,9 @@ export default function LoginPage() {
                         <RefreshCw className={`h-4 w-4 ${captchaLoading ? 'animate-spin' : ''}`} />
                       </Button>
                     </div>
+                    <p className="text-[10px] text-muted-foreground/60 text-center">
+                      Note: Auto-fill is experimental and may not work for all captchas. Please verify before logging in.
+                    </p>
                   </div>
                   
                   <Button 
