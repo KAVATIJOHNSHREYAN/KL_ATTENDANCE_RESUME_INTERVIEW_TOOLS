@@ -13,7 +13,7 @@ A modern, responsive web application for KLU students to calculate their attenda
 - **Save Calculations**: Save your calculations as drafts with subject names
 - **Draft Management**: View, load, and delete saved drafts
 - **Responsive Design**: Works on all devices from mobile to desktop
-- **Dark/Light Mode**: Toggle between color theme
+- **Dark/Light Mode**: Toggle between color themes
 
 ## Technologies Used
 
