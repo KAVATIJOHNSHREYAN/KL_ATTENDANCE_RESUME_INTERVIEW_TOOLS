@@ -51,7 +51,7 @@ export function Footer() {
               <Instagram className="h-5 w-5" />
             </a>
             <a 
-              href="https://jaikanthh.github.io/portfolio-website/" 
+              href="https://jayakanthkamisetti.com" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-red-500 transition-colors"

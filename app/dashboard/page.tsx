@@ -302,7 +302,7 @@ export default function DashboardPage() {
                                    {bunkSuggestions.length > 0 && (
                                        <div>
                                             <h5 className="text-[10px] font-bold text-green-700 dark:text-green-400 uppercase tracking-wider mb-2 border-b pb-1">
-                                                Safe to Bunk <span className="text-muted-foreground font-normal normal-case ml-1">(Any 1)</span>
+                                                Safe to Skip <span className="text-muted-foreground font-normal normal-case ml-1">(Any 1)</span>
                                             </h5>
                                             <div className="space-y-1 pl-1">
                                                 {bunkSuggestions}
