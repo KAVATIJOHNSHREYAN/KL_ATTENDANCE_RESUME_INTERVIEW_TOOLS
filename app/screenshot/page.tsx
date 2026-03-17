@@ -611,9 +611,16 @@ export default function ScreenshotCalculatorPage() {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'Screenshot Attendance Calculator',
+    url: 'https://klattendance.vercel.app/screenshot',
     description: 'Upload your attendance screenshot to automatically calculate percentage and check eligibility using OCR.',
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web',
+    isAccessibleForFree: true,
+    publisher: {
+      '@type': 'Person',
+      name: 'Jayakanth Kamisetti',
+      url: 'https://jayakanthkamisetti.com'
+    },
     offers: {
       '@type': 'Offer',
       price: '0',

@@ -349,9 +349,16 @@ export default function LoginPage() {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'KL ERP Login',
+    url: 'https://klattendance.vercel.app/login',
     description: 'Secure login to KL University ERP to fetch attendance and timetable details automatically.',
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web',
+    isAccessibleForFree: true,
+    publisher: {
+      '@type': 'Person',
+      name: 'Jayakanth Kamisetti',
+      url: 'https://jayakanthkamisetti.com'
+    },
     offers: {
       '@type': 'Offer',
       price: '0',

@@ -111,6 +111,31 @@ export const metadata: Metadata = {
   },
 }
 
+const structuredData = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Jayakanth Kamisetti',
+    url: 'https://jayakanthkamisetti.com',
+    sameAs: [
+      'https://github.com/jaikanthh',
+      'https://linkedin.com/in/jaikanthh',
+      'https://instagram.com/jaikanthh',
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'KL University Attendance Calculator',
+    url: 'https://klattendance.vercel.app',
+    publisher: {
+      '@type': 'Person',
+      name: 'Jayakanth Kamisetti',
+      url: 'https://jayakanthkamisetti.com',
+    },
+  },
+]
+
 export default function RootLayout({
   children,
 }: {
@@ -120,6 +145,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
       </head>
       <body className={`${poppins.variable} ${outfit.variable} font-outfit overflow-x-hidden flex flex-col min-h-screen`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>

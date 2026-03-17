@@ -14,18 +14,24 @@ export default function WelcomePage() {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
       name: 'KL University Attendance Calculator',
+      url: 'https://klattendance.vercel.app/',
       description: 'Calculate your attendance percentage and check eligibility for KL University exams based on the University attendance policy.',
       applicationCategory: 'EducationalApplication',
       operatingSystem: 'Web',
+      isAccessibleForFree: true,
       offers: {
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'USD'
       },
-      creator: {
-        '@type': 'Organization',
-        name: 'KL University',
-        url: 'https://www.kluniversity.in/'
+      publisher: {
+        '@type': 'Person',
+        name: 'Jayakanth Kamisetti',
+        url: 'https://jayakanthkamisetti.com'
+      },
+      about: {
+        '@type': 'Thing',
+        name: 'KL University attendance policy and exam eligibility'
       }
     },
     {
@@ -341,7 +347,7 @@ export default function WelcomePage() {
                  </div>
                  <div className="flex items-center gap-2 text-sm text-muted-foreground font-outfit">
                     <span className="h-1.5 w-1.5 rounded-full bg-red-500 flex-shrink-0"></span>
-                    <span>Regular monitoring is the student's responsibility.</span>
+                    <span>Regular monitoring is the student&apos;s responsibility.</span>
                  </div>
               </div>
               

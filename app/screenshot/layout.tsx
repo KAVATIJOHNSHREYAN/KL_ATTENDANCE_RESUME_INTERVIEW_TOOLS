@@ -2,9 +2,9 @@ import { Metadata } from "next"
 import React from "react"
 
 export const metadata: Metadata = {
-  title: "Screenshot Attendance Calculator | KL University",
-  description: "Upload your attendance screenshot to automatically calculate percentage and check eligibility. OCR-powered attendance analysis.",
-  keywords: ['Screenshot Attendance', 'OCR Attendance', 'Image to Attendance', 'KL University Screenshot'],
+  title: "Screenshot Calculator | KL University Attendance Calculator",
+  description: "Upload your attendance screenshot to extract subjects and calculate eligibility automatically.",
+  keywords: ['Screenshot Attendance Calculator', 'OCR Attendance', 'Subject-wise Attendance', 'KL University'],
   alternates: {
     canonical: '/screenshot',
   },

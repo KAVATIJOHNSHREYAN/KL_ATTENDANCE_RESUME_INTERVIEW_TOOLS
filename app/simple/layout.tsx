@@ -2,9 +2,9 @@ import { Metadata } from "next"
 import React from "react"
 
 export const metadata: Metadata = {
-  title: "Simple Attendance Calculator | KL University",
-  description: "Calculate your simple attendance percentage based on total classes and attended classes. Check your eligibility for exams.",
-  keywords: ['Simple Attendance Calculator', 'Basic Attendance', 'KL University Simple Calculator'],
+  title: "Simple Attendance Calculator | KL University Attendance Calculator",
+  description: "Quickly calculate your attendance percentage and eligibility using total classes and attended classes.",
+  keywords: ['Simple Attendance Calculator', 'Attendance Percentage', 'Exam Eligibility', '75% attendance', '85% attendance'],
   alternates: {
     canonical: '/simple',
   },

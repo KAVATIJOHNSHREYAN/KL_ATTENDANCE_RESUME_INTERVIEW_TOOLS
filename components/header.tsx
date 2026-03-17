@@ -26,7 +26,7 @@ export default function Header() {
   }, [])
 
   const navigationItems = [
-    { name: 'Home', href: '/welcome' },
+    { name: 'Home', href: '/' },
     { name: 'Simple Calculator', href: '/simple' },
     { name: 'LTPS Calculator', href: '/ltps' },
     { name: 'Screenshot Calculator', href: '/screenshot' },
@@ -42,7 +42,7 @@ export default function Header() {
       <div className="container mx-auto px-2 sm:px-4 flex justify-between items-center">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
           <Link
-            href="/welcome"
+            href="/"
             className="flex items-center gap-2"
           >
             <div className="relative flex items-center">

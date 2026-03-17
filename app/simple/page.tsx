@@ -122,9 +122,16 @@ export default function SimpleCalculatorPage() {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'Simple Attendance Calculator',
+    url: 'https://klattendance.vercel.app/simple',
     description: 'Calculate your simple attendance percentage based on total classes and attended classes.',
     applicationCategory: 'EducationalApplication',
     operatingSystem: 'Web',
+    isAccessibleForFree: true,
+    publisher: {
+      '@type': 'Person',
+      name: 'Jayakanth Kamisetti',
+      url: 'https://jayakanthkamisetti.com'
+    },
     offers: {
       '@type': 'Offer',
       price: '0',

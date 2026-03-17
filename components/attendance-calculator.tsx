@@ -307,7 +307,7 @@ export function LTPSCalculator({ components }: LTPSCalculatorProps) {
                   {(!components.lecture.percentage && !components.tutorial.percentage && 
                     !components.practical.percentage && !components.skilling.percentage) && (
                     <p className="text-sm text-muted-foreground mt-2">
-                      Please enter at least one component's attendance to calculate the final percentage.
+                      Please enter at least one component&apos;s attendance to calculate the final percentage.
                     </p>
                   )}
                 </div>

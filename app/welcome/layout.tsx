@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Get started with the KL University Attendance Calculator. Choose between Simple, LTPS, or Screenshot calculators to check your exam eligibility.",
   keywords: ['KL University Attendance', 'Attendance Calculator Portal', 'Student Tools'],
   alternates: {
-    canonical: '/welcome',
+    canonical: '/',
   },
 }
 
