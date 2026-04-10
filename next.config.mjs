@@ -40,7 +40,7 @@ const nextConfig = {
       },
       {
         // Public folder assets (SVGs, favicons, etc.)
-        source: '/:path((?!api/).*)\\.(?:svg|png|ico|webmanifest|webp|jpg|jpeg|gif|woff|woff2|ttf)$',
+        source: '/:file*.:ext(svg|png|ico|webmanifest|webp|jpg|jpeg|gif|woff|woff2|ttf)',
         headers: [
           { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
         ],
