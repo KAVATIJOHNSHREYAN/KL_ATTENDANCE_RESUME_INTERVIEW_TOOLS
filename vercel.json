@@ -1,0 +1,24 @@
+{
+  "functions": {
+    "app/api/parse-ocr/route.ts": {
+      "memory": 512,
+      "maxDuration": 30
+    },
+    "app/api/login/route.ts": {
+      "memory": 256,
+      "maxDuration": 15
+    },
+    "app/api/captcha/route.ts": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "app/api/solve-captcha/route.ts": {
+      "memory": 256,
+      "maxDuration": 10
+    },
+    "app/api/fetch-attendance/route.ts": {
+      "memory": 256,
+      "maxDuration": 15
+    }
+  }
+}

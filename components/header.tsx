@@ -68,8 +68,9 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  <Link 
-                    href={item.href} 
+                  <Link
+                    href={item.href}
+                    prefetch={false}
                     className="text-foreground/80 hover:text-red-500 transition-colors relative group font-outfit"
                   >
                     {item.name}
@@ -105,6 +106,7 @@ export default function Header() {
                   <li key={item.name}>
                     <Link
                       href={item.href}
+                      prefetch={false}
                       className="text-foreground/80 hover:text-red-500 transition-colors block py-2 font-outfit"
                       onClick={() => setMobileMenuOpen(false)}
                     >

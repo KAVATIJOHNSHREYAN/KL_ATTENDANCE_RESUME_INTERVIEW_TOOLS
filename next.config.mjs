@@ -29,6 +29,24 @@ const nextConfig = {
   },
   // Hide the "powered by Vercel" widget
   poweredByHeader: false,
+  async headers() {
+    return [
+      {
+        // Immutable static assets — browser caches forever, no re-requests
+        source: '/_next/static/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        // Public folder assets (SVGs, favicons, etc.)
+        source: '/:path((?!api/).*)\\.(?:svg|png|ico|webmanifest|webp|jpg|jpeg|gif|woff|woff2|ttf)$',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
+        ],
+      },
+    ]
+  },
   // Middleware doesn't work with static export
   // output: 'export',
 }

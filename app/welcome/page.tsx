@@ -129,7 +129,7 @@ export default function WelcomePage() {
               </CardContent>
               <CardFooter className="mt-auto pt-2">
                 <div className="w-full">
-                  <Link href="/login">
+                  <Link href="/login" prefetch={false}>
                     <Button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">Login to ERP</Button>
                   </Link>
                 </div>
@@ -173,7 +173,7 @@ export default function WelcomePage() {
               </CardContent>
               <CardFooter className="mt-auto pt-2">
                 <div className="w-full">
-                  <Link href="/simple">
+                  <Link href="/simple" prefetch={false}>
                     <Button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">Use Simple Calculator</Button>
                   </Link>
                 </div>
@@ -217,7 +217,7 @@ export default function WelcomePage() {
               </CardContent>
               <CardFooter className="mt-auto pt-2">
                 <div className="w-full">
-                  <Link href="/ltps">
+                  <Link href="/ltps" prefetch={false}>
                     <Button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">Use LTPS Calculator</Button>
                   </Link>
                 </div>
@@ -265,7 +265,7 @@ export default function WelcomePage() {
               </CardContent>
               <CardFooter className="mt-auto pt-2">
                 <div className="w-full">
-                  <Link href="/screenshot">
+                  <Link href="/screenshot" prefetch={false}>
                     <Button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700">Use Screenshot Calculator</Button>
                   </Link>
                 </div>
