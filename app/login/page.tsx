@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-import { RefreshCw, LogIn, AlertCircle, Loader2, Calendar, BookOpen } from "lucide-react"
+import { RefreshCw, LogIn, AlertCircle, Loader2, Calendar, BookOpen, Info } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
@@ -27,6 +27,9 @@ export default function LoginPage() {
   const [captcha, setCaptcha] = useState('')
   const [captchaImage, setCaptchaImage] = useState<string | null>(null)
   const [rememberMe, setRememberMe] = useState(false)
+  // The ERP's signed device cookie, persisted across logins. Required to avoid
+  // the ERP's post-login UserAccessToken crash (see lib/scraper.ts).
+  const [deviceId, setDeviceId] = useState('')
   
   // App State
   const [loading, setLoading] = useState(false)
@@ -42,96 +45,25 @@ export default function LoginPage() {
   const [selectedSem, setSelectedSem] = useState('')
   const [csrfToken, setCsrfToken] = useState('')
 
-  const processImageForOCR = (blob: Blob): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image()
-      const url = URL.createObjectURL(blob)
-      img.src = url
-      
-      img.onload = () => {
-          // Upscale image to improve OCR recognition of small/pixelated text
-          // Uniform Scaling (4.0x) preserves horizontal stroke thickness (fixes 't' -> 'l')
-          // while Gamma 0.5 handles the thinning of bold text.
-          const scaleX = 4.0
-          const scaleY = 4.0 
-          const padding = 40
-          const canvas = document.createElement('canvas')
-        canvas.width = (img.width * scaleX) + (padding * 2)
-        canvas.height = (img.height * scaleY) + (padding * 2)
-        const ctx = canvas.getContext('2d')
-        if (!ctx) {
-          URL.revokeObjectURL(url)
-          reject(new Error('Canvas context not available'))
-          return
-        }
-        
-        // Fill white background first (for padding)
-        ctx.fillStyle = '#FFFFFF'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-        
-        // Removed Blur: It reduced visibility too much
-        
-        // Use high quality scaling
-        ctx.imageSmoothingEnabled = true
-        ctx.imageSmoothingQuality = 'high'
-        ctx.drawImage(img, padding, padding, img.width * scaleX, img.height * scaleY)
-        
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-        const data = imageData.data
-        
-        // Preprocess: Red Channel Inversion + Linear Contrast Boost
-        // Goal: Restore visibility while maintaining separation
-        
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i]
-          
-          // 1. Red Channel Inversion
-          // Pink (R=255) -> 0 (Black)
-          // Black (R=0) -> 255 (White)
-          let val = 255 - r
-          
-          // 2. Contrast Boost (Linear Level Adjustment)
-          // Previous Gamma 0.5 washed out the text (gray).
-          // We need to make the text BLACK again.
-          // Cut off bottom noise (imperfections in pink) and stretch.
-          // val = (val - black_point) * gain
-          
-          val = (val - 40) * 1.3
-          
-          // Clamp
-          if (val < 0) val = 0
-          if (val > 255) val = 255
-          
-          data[i] = val
-          data[i + 1] = val
-          data[i + 2] = val
-          // Alpha remains unchanged
-        }
-         
-         // Removed Sharpening
-         
-         ctx.putImageData(imageData, 0, 0)
-        const base64 = canvas.toDataURL('image/png')
-        URL.revokeObjectURL(url)
-        resolve(base64)
-      }
-      
-      img.onerror = (err) => {
-        URL.revokeObjectURL(url)
-        reject(err)
-      }
-    })
-  }
+  // First-time ERP device registration is a two-step dance (the ERP's
+  // UserAccessToken bug): the first login with correct credentials crashes but
+  // registers the device; a second login then succeeds. We persist the device
+  // id (httpOnly cookie + localStorage) so this only happens ONCE per device.
+  // `status` carries the short, non-error heads-up shown for that second step.
+  const [status, setStatus] = useState<string | null>(null)
 
-  const fetchCaptcha = async (preserveError = false) => {
+  // Fetch a fresh captcha, auto-solve it via OCR, and return the solved text
+  // (empty string if OCR produced nothing). Returning the text lets the device-
+  // setup grind decide whether to auto-submit or fetch another one.
+  const fetchCaptcha = async (preserveError = false): Promise<string> => {
     setCaptchaLoading(true)
     if (!preserveError) setError(null)
     setCaptcha('') // Clear previous captcha
-    
+
     try {
       const response = await fetch('/api/captcha')
       if (!response.ok) throw new Error('Failed to load captcha')
-      
+
       const sid = response.headers.get('x-session-id')
       if (sid) setSessionId(sid)
 
@@ -139,60 +71,35 @@ export default function LoginPage() {
       const imageUrl = URL.createObjectURL(blob)
       setCaptchaImage(imageUrl)
 
-      // Auto-solve captcha with fallback strategy
-      const reader = new FileReader()
-      reader.readAsDataURL(blob)
-      
-      reader.onloadend = async () => {
-        const originalBase64 = reader.result as string
-        let processedBase64: string | null = null
+      // Auto-solve the captcha. We send the ORIGINAL PNG (alpha channel intact)
+      // so the server can use the alpha mask to produce a clean black-on-white
+      // image for OCR — see lib/ocr.ts.
+      const originalBase64: string = await new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result as string)
+        reader.onerror = reject
+        reader.readAsDataURL(blob)
+      })
 
-        try {
-          processedBase64 = await processImageForOCR(blob)
-        } catch (processErr) {
-          console.warn('Image preprocessing failed', processErr)
+      try {
+        const res = await fetch('/api/solve-captcha', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: originalBase64 }),
+        })
+        const data = await res.json()
+        if (data.success && data.text) {
+          setCaptcha(data.text)
+          return data.text
         }
-
-        // Helper to call API
-        const solve = async (img: string) => {
-            const res = await fetch('/api/solve-captcha', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ image: img })
-            })
-            return await res.json()
-        }
-
-        let solvedText = ''
-
-        // 1. Try Processed Image first (Optimized for OCR)
-        if (processedBase64) {
-            try {
-                const data = await solve(processedBase64)
-                if (data.success && data.text) {
-                    solvedText = data.text
-                }
-            } catch (e) { console.error('Processed OCR failed', e) }
-        }
-
-        // 2. If failed, fallback to Original Image
-        if (!solvedText) {
-            console.log('Processed image yielded no text, trying original...')
-            try {
-                const data = await solve(originalBase64)
-                if (data.success && data.text) {
-                    solvedText = data.text
-                }
-            } catch (e) { console.error('Original OCR failed', e) }
-        }
-
-        if (solvedText) {
-            setCaptcha(solvedText)
-        }
+      } catch (e) {
+        console.error('Captcha auto-solve failed', e)
       }
+      return ''
     } catch (err) {
       console.error(err)
       setError('Failed to load CAPTCHA. Please try again.')
+      return ''
     } finally {
       setCaptchaLoading(false)
     }
@@ -200,6 +107,11 @@ export default function LoginPage() {
 
   useEffect(() => {
     fetchCaptcha()
+    // Restore the previously-registered ERP device id, if any.
+    try {
+      const savedDevice = localStorage.getItem('kl_erp_device_id')
+      if (savedDevice) setDeviceId(savedDevice)
+    } catch {}
     // Check for saved credentials
     const savedUser = Cookies.get('remember_username')
     const savedPass = Cookies.get('remember_password')
@@ -210,9 +122,9 @@ export default function LoginPage() {
     }
   }, [])
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
+  const handleLogin = async (e?: React.FormEvent) => {
+    e?.preventDefault()
+
     if (!username || !password || !captcha) {
       setError('Please fill in all fields')
       return
@@ -220,6 +132,7 @@ export default function LoginPage() {
 
     setLoading(true)
     setError(null)
+    setStatus(null)
 
     try {
       const response = await fetch('/api/login', {
@@ -231,11 +144,31 @@ export default function LoginPage() {
         body: JSON.stringify({
           username,
           password,
-          captcha
+          captcha,
+          deviceId: deviceId || (typeof localStorage !== 'undefined' ? localStorage.getItem('kl_erp_device_id') : '') || ''
         })
       })
 
       const data = await response.json()
+
+      // Persist any device id the ERP issued (used to avoid its login crash).
+      if (data.deviceId) {
+        setDeviceId(data.deviceId)
+        try { localStorage.setItem('kl_erp_device_id', data.deviceId) } catch {}
+      }
+
+      // First-time device registration: the ERP registered this device but
+      // (its bug) needs one more login to finish. Show a short, friendly
+      // heads-up and load a fresh captcha for the user to enter once more. This
+      // is a one-time step per device — the device id is now saved.
+      if (data.needsCaptchaRetry) {
+        setError(null)
+        setStatus(
+          'First-time setup on this device: please enter the captcha once more to finish signing in. This only happens once per device.'
+        )
+        await fetchCaptcha(true)
+        return
+      }
 
       if (!response.ok) {
         throw new Error(data.message || 'Login failed')
@@ -283,10 +216,12 @@ export default function LoginPage() {
       }
 
       // Move to next step
+      setStatus(null)
       setStep('select-sem')
 
     } catch (err) {
       console.error(err)
+      setStatus(null)
       setError(err instanceof Error ? err.message : 'Login failed. Please check your credentials and try again.')
       // Refresh captcha on failure
       fetchCaptcha(true)
@@ -405,6 +340,14 @@ export default function LoginPage() {
                   <AlertCircle className="h-4 w-4" />
                   <AlertTitle>Error</AlertTitle>
                   <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              {status && !error && (
+                <Alert className="mb-4 border-red-500/30">
+                  <Info className="h-4 w-4" />
+                  <AlertTitle>One-time setup</AlertTitle>
+                  <AlertDescription>{status}</AlertDescription>
                 </Alert>
               )}
 

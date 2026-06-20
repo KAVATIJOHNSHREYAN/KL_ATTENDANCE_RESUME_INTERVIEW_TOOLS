@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 
+// Prefer an env-configured key; fall back to the public free-tier key.
+const OCR_SPACE_API_KEY = process.env.OCR_SPACE_API_KEY || 'K87899142388957'
+
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData()
@@ -134,7 +137,7 @@ interface StoredAttendanceData {
 }
 
 // Simple and robust parsing function
-export function smartParseAttendanceData(text: string): AttendanceRecord[] {
+function smartParseAttendanceData(text: string): AttendanceRecord[] {
   const records: AttendanceRecord[] = []
   const rawLines = text.split('\n')
   
@@ -638,7 +641,7 @@ async function performOCRWithOCRSpace(buffer: Buffer): Promise<string> {
       const response = await fetch('https://api.ocr.space/parse/image', {
         method: 'POST',
         headers: {
-          'apikey': 'K87899142388957' // Free API key
+          'apikey': OCR_SPACE_API_KEY
         },
         body: formData,
         signal: controller.signal
@@ -706,7 +709,7 @@ async function performOCRWithEngine1Fallback(buffer: Buffer): Promise<string> {
       const response = await fetch('https://api.ocr.space/parse/image', {
         method: 'POST',
         headers: {
-          'apikey': 'K87899142388957'
+          'apikey': OCR_SPACE_API_KEY
         },
         body: formData,
         signal: controller.signal
@@ -768,7 +771,7 @@ async function performOCRWithEngine2(buffer: Buffer): Promise<string> {
       const response = await fetch('https://api.ocr.space/parse/image', {
         method: 'POST',
         headers: {
-          'apikey': 'K87899142388957'
+          'apikey': OCR_SPACE_API_KEY
         },
         body: formData,
         signal: controller.signal

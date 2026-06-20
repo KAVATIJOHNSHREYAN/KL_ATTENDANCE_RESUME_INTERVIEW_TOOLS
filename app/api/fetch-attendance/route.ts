@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { fetchAttendanceData, ScraperSession } from '@/lib/scraper'
+import { decodeSession } from '@/lib/session'
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,8 +20,7 @@ export async function POST(request: NextRequest) {
     // Decode session
     let session: ScraperSession
     try {
-      const sessionStr = Buffer.from(sessionId, 'base64').toString('utf-8')
-      session = JSON.parse(sessionStr)
+      session = decodeSession(sessionId)
     } catch (e) {
       return NextResponse.json(
         { success: false, message: 'Invalid session' },

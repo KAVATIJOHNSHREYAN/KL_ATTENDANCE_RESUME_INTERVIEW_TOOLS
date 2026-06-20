@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server'
 import { getCaptcha } from '@/lib/scraper'
+import { encodeSession } from '@/lib/session'
 
 export async function GET() {
   try {
     const { captchaImage, session } = await getCaptcha()
 
-    // Encode session data to base64 to send as session_id
-    // In production, encrypt this!
-    const sessionId = Buffer.from(JSON.stringify(session)).toString('base64')
+    // Encode (and encrypt, when SESSION_SECRET is set) the session to send as session_id
+    const sessionId = encodeSession(session)
 
     // The captchaImage is already a data URL (base64)
     // But the frontend expects an image blob/buffer usually?
