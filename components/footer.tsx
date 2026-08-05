@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Github, Linkedin, Globe } from "lucide-react"
+import { Github, Linkedin, Globe, Mail } from "lucide-react"
 
 export function Footer() {
   return (
@@ -49,6 +49,13 @@ export function Footer() {
               aria-label="Website"
             >
               <Globe className="h-5 w-5" />
+            </a>
+            <a 
+              href="mailto:2400033326cse2@gmail.com" 
+              className="text-muted-foreground hover:text-blue-500 transition-colors"
+              aria-label="Email"
+            >
+              <Mail className="h-5 w-5" />
             </a>
           </div>
         </div>
