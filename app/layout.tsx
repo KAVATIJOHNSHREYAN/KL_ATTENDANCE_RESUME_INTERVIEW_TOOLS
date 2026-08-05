@@ -4,6 +4,7 @@ import { Poppins, Outfit } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import Header from "@/components/header"
 import { Footer } from "@/components/footer"
+import AnimatedBackground from "@/components/animated-background"
 import { Metadata } from "next"
 
 // Force static generation
@@ -150,13 +151,16 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </head>
-      <body className={`${poppins.variable} ${outfit.variable} font-outfit overflow-x-hidden flex flex-col min-h-screen`}>
+      <body className={`${poppins.variable} ${outfit.variable} font-outfit overflow-x-hidden flex flex-col min-h-screen bg-transparent relative`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <Header />
-          <main className="container mx-auto px-4 sm:px-6 py-8 pt-20 md:pt-24 flex-grow">
-            {children}
-          </main>
-          <Footer />
+          <AnimatedBackground />
+          <div className="relative z-10 flex flex-col flex-grow min-h-screen">
+            <Header />
+            <main className="container mx-auto px-4 sm:px-6 py-8 pt-20 md:pt-24 flex-grow">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </ThemeProvider>
       </body>
     </html>
