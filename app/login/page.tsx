@@ -291,8 +291,8 @@ export default function LoginPage() {
     isAccessibleForFree: true,
     publisher: {
       '@type': 'Person',
-      name: 'Jayakanth Kamisetti',
-      url: 'https://jayakanthkamisetti.com'
+      name: 'Kavati John Shreyan',
+      url: 'https://github.com/KAVATIJOHNSHREYAN'
     },
     offers: {
       '@type': 'Offer',

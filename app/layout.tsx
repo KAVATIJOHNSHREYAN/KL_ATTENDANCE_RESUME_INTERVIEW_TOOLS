@@ -116,23 +116,21 @@ const structuredData = [
   {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    name: 'Jayakanth Kamisetti',
-    url: 'https://jayakanthkamisetti.com',
+    name: 'Kavati John Shreyan',
+    url: 'https://github.com/KAVATIJOHNSHREYAN',
     sameAs: [
-      'https://github.com/jaikanthh',
-      'https://linkedin.com/in/jaikanthh',
-      'https://instagram.com/jaikanthh',
+      'https://github.com/KAVATIJOHNSHREYAN',
     ],
   },
   {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'KL University Attendance Calculator',
-    url: 'https://klattendance.vercel.app',
+    url: 'https://github.com/KAVATIJOHNSHREYAN/LTPS_ATTENDANCE_CALCULATOR',
     publisher: {
       '@type': 'Person',
-      name: 'Jayakanth Kamisetti',
-      url: 'https://jayakanthkamisetti.com',
+      name: 'Kavati John Shreyan',
+      url: 'https://github.com/KAVATIJOHNSHREYAN',
     },
   },
 ]

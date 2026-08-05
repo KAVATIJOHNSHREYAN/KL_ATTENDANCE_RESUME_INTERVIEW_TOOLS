@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Github, Linkedin, Instagram, Globe } from "lucide-react"
+import { Github } from "lucide-react"
 
 export function Footer() {
   return (
@@ -10,12 +10,12 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               Built and developed by{" "}
               <a 
-                href="https://jayakanthkamisetti.com" 
+                href="https://github.com/KAVATIJOHNSHREYAN" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="font-medium text-foreground hover:text-red-500 transition-colors"
+                className="font-medium text-foreground hover:text-blue-500 transition-colors"
               >
-                Jayakanth Kamisetti
+                Kavati John Shreyan
               </a>
             </p>
             <p className="text-xs text-muted-foreground mt-1">
@@ -24,40 +24,13 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-4">
             <a 
-              href="https://github.com/jaikanthh" 
+              href="https://github.com/KAVATIJOHNSHREYAN/LTPS_ATTENDANCE_CALCULATOR" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-red-500 transition-colors"
+              className="text-muted-foreground hover:text-blue-500 transition-colors"
               aria-label="GitHub"
             >
               <Github className="h-5 w-5" />
-            </a>
-            <a 
-              href="https://linkedin.com/in/jaikanthh" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-red-500 transition-colors"
-              aria-label="LinkedIn"
-            >
-              <Linkedin className="h-5 w-5" />
-            </a>
-            <a 
-              href="https://instagram.com/jaikanthh" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-red-500 transition-colors"
-              aria-label="Instagram"
-            >
-              <Instagram className="h-5 w-5" />
-            </a>
-            <a 
-              href="https://jayakanthkamisetti.com" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-muted-foreground hover:text-red-500 transition-colors"
-              aria-label="Website"
-            >
-              <Globe className="h-5 w-5" />
             </a>
           </div>
         </div>
