@@ -130,7 +130,7 @@ export default function SimpleCalculatorPage() {
     publisher: {
       '@type': 'Person',
       name: 'Kavati John Shreyan',
-      url: 'https://github.com/KAVATIJOHNSHREYAN'
+      url: 'https://kavatijohnshreyan-github-io.vercel.app/'
     },
     offers: {
       '@type': 'Offer',

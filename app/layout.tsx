@@ -117,9 +117,10 @@ const structuredData = [
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: 'Kavati John Shreyan',
-    url: 'https://github.com/KAVATIJOHNSHREYAN',
+    url: 'https://kavatijohnshreyan-github-io.vercel.app/',
     sameAs: [
-      'https://github.com/KAVATIJOHNSHREYAN',
+      'https://github.com/KAVATIJOHNSHREYAN/',
+      'https://www.linkedin.com/in/kavati-john-shreyan-956a35366/',
     ],
   },
   {
@@ -130,7 +131,7 @@ const structuredData = [
     publisher: {
       '@type': 'Person',
       name: 'Kavati John Shreyan',
-      url: 'https://github.com/KAVATIJOHNSHREYAN',
+      url: 'https://kavatijohnshreyan-github-io.vercel.app/',
     },
   },
 ]

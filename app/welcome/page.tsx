@@ -26,7 +26,7 @@ export default function WelcomePage() {
       publisher: {
         '@type': 'Person',
         name: 'Kavati John Shreyan',
-        url: 'https://github.com/KAVATIJOHNSHREYAN'
+        url: 'https://kavatijohnshreyan-github-io.vercel.app/'
       },
       about: {
         '@type': 'Thing',

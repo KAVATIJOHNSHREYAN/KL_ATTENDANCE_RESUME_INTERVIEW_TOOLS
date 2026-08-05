@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Github } from "lucide-react"
+import { Github, Linkedin, Globe } from "lucide-react"
 
 export function Footer() {
   return (
@@ -10,7 +10,7 @@ export function Footer() {
             <p className="text-sm text-muted-foreground">
               Built and developed by{" "}
               <a 
-                href="https://github.com/KAVATIJOHNSHREYAN" 
+                href="https://kavatijohnshreyan-github-io.vercel.app/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="font-medium text-foreground hover:text-blue-500 transition-colors"
@@ -24,13 +24,31 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-4">
             <a 
-              href="https://github.com/KAVATIJOHNSHREYAN/LTPS_ATTENDANCE_CALCULATOR" 
+              href="https://github.com/KAVATIJOHNSHREYAN/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-blue-500 transition-colors"
               aria-label="GitHub"
             >
               <Github className="h-5 w-5" />
+            </a>
+            <a 
+              href="https://www.linkedin.com/in/kavati-john-shreyan-956a35366/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-blue-500 transition-colors"
+              aria-label="LinkedIn"
+            >
+              <Linkedin className="h-5 w-5" />
+            </a>
+            <a 
+              href="https://kavatijohnshreyan-github-io.vercel.app/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-muted-foreground hover:text-blue-500 transition-colors"
+              aria-label="Website"
+            >
+              <Globe className="h-5 w-5" />
             </a>
           </div>
         </div>
