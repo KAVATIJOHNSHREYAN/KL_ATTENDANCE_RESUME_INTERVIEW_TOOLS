@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { motion, AnimatePresence } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
 import { Menu, X } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -31,6 +32,7 @@ export default function Header() {
     { name: 'LTPS Calculator', href: '/ltps' },
     { name: 'Screenshot Calculator', href: '/screenshot' },
     { name: 'ERP Login', href: '/login' },
+    { name: 'AI Resume Builder', href: 'http://localhost:5173' },
   ]
 
   return (
@@ -80,6 +82,20 @@ export default function Header() {
               ))}
             </ul>
           </nav>
+          
+          <div className="flex items-center gap-3">
+            <SignedOut>
+              <SignInButton mode="modal">
+                <Button variant="outline" size="sm">Sign In</Button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <Button size="sm">Sign Up</Button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton afterSignOutUrl="/" />
+            </SignedIn>
+          </div>
           <ModeToggle />
         </div>
 
